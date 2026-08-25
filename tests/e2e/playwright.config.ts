@@ -92,7 +92,13 @@ export default defineConfig({
 
     // Shared defaults. CLI `--headed` overrides `headless` per-invocation.
     use: {
-        actionTimeout: 0,
+        // MUST stay finite. `0` means "wait forever": a `locator.waitFor()` on an
+        // element that never renders then blocks until the whole test times out,
+        // and any surrounding try/catch never runs. That is exactly how a
+        // best-effort "dismiss admin notice" click burned the full 180s test
+        // budget in setup (LS0003) and took every downstream spec with it.
+        // 60s is well inside the test budget while still generous for slow CI.
+        actionTimeout: 60000,
         headless: true,
         viewport: { width: 1280, height: 720 },
         trace: 'retain-on-failure',

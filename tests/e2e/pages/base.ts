@@ -150,6 +150,29 @@ export class Base {
         }
     }
 
+    // Best-effort click for OPTIONAL, may-or-may-not-exist UI (admin notices,
+    // opt-in prompts, setup wizards). Never throws and never blocks: it waits a
+    // short, EXPLICIT timeout instead of inheriting the global default.
+    //
+    // Do NOT swap this for `try { validateAndClick() } catch {}` — that pattern
+    // hung the whole setup suite for 180s. `validateAndClick` calls
+    // `waitFor()` with no timeout, and `use.actionTimeout` was 0 (= wait
+    // forever), so a notice that never rendered blocked until the test timeout
+    // and the catch block never ran.
+    async dismissIfPresent(locator: string, timeout = 3000) {
+        try {
+            const element = this.page.locator(locator).first();
+            await element.waitFor({ state: 'visible', timeout });
+            await element.click({ timeout });
+            await this.waitForLoading();
+            console.log('\x1b[35m%s\x1b[0m', `✅ Dismissed ${locator}`);
+            return true;
+        } catch {
+            console.log('\x1b[90m%s\x1b[0m', `⏭️  Not present, skipped ${locator}`);
+            return false;
+        }
+    }
+
     // Validate and Click any
     async validateAndClickAny(locator: string) {
         try {
