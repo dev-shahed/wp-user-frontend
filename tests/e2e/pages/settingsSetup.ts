@@ -141,7 +141,13 @@ export class SettingsSetupPage extends Base {
         await this.assertionValidate(Selectors.settingsSetup.wpufPages.wpufLoginPage);
         await this.assertionValidate(Selectors.settingsSetup.wpufPages.orderReceivedPage);
         await this.assertionValidate(Selectors.settingsSetup.wpufPages.paymentPage);
-        await this.validateAndClick(Selectors.settingsSetup.wpufPages.clickNextPage);
+        // The Pages list only paginates once the site has more than one screen of
+        // pages (20 by default), and WordPress renders no "Next page" link at all
+        // when it fits on one. Which companion plugins are active decides that
+        // count — CI now reports exactly 20 items, with every WPUF page on screen
+        // one — so advance only if the link is really there. The remaining pages
+        // are asserted either way.
+        await this.clickIfAvailable(Selectors.settingsSetup.wpufPages.clickNextPage);
         await this.assertionValidate(Selectors.settingsSetup.wpufPages.wpufSubscriptionPage);
         await this.assertionValidate(Selectors.settingsSetup.wpufPages.thankYouPage);
         console.log('WPUF Pages are validated. all pages created successfully');
