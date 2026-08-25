@@ -141,7 +141,13 @@ export class SettingsSetupPage extends Base {
         await this.assertionValidate(Selectors.settingsSetup.wpufPages.wpufLoginPage);
         await this.assertionValidate(Selectors.settingsSetup.wpufPages.orderReceivedPage);
         await this.assertionValidate(Selectors.settingsSetup.wpufPages.paymentPage);
-        await this.validateAndClick(Selectors.settingsSetup.wpufPages.clickNextPage);
+        // The Pages list only paginates once the site has more than one screen of
+        // pages (20 by default), and WP renders no "Next page" link at all when
+        // it fits on one. Which companion plugins are active decides that, so
+        // advance only if the link is actually there — the remaining WPUF pages
+        // are asserted either way. Hard-clicking it hung LS0010 for the full
+        // action timeout once the list dropped to exactly 20 items.
+        await this.clickIfPresent(Selectors.settingsSetup.wpufPages.clickNextPage);
         await this.assertionValidate(Selectors.settingsSetup.wpufPages.wpufSubscriptionPage);
         await this.assertionValidate(Selectors.settingsSetup.wpufPages.thankYouPage);
         console.log('WPUF Pages are validated. all pages created successfully');
@@ -194,14 +200,14 @@ export class SettingsSetupPage extends Base {
             }
         };
         this.page.on('dialog', dialogHandler);
-        await this.dismissIfPresent(Selectors.settingsSetup.pluginStatusCheck.clickRunUpdater);
+        await this.clickIfPresent(Selectors.settingsSetup.pluginStatusCheck.clickRunUpdater);
         this.page.off('dialog', dialogHandler);
 
-        await this.dismissIfPresent(Selectors.settingsSetup.pluginStatusCheck.clickAllow1);
+        await this.clickIfPresent(Selectors.settingsSetup.pluginStatusCheck.clickAllow1);
 
-        await this.dismissIfPresent(Selectors.settingsSetup.pluginStatusCheck.clickAllow);
+        await this.clickIfPresent(Selectors.settingsSetup.pluginStatusCheck.clickAllow);
 
-        await this.dismissIfPresent(Selectors.settingsSetup.pluginStatusCheck.clickSkipSetup);
+        await this.clickIfPresent(Selectors.settingsSetup.pluginStatusCheck.clickSkipSetup);
 
         // try {
         //     await this.validateAndClick(Selectors.settingsSetup.pluginStatusCheck.clickSwitchCart);
@@ -215,9 +221,9 @@ export class SettingsSetupPage extends Base {
         //     console.log('Failed to click Dismiss:', error);
         // }
 
-        await this.dismissIfPresent(Selectors.settingsSetup.pluginStatusCheck.clickEDDnoticeCross);
+        await this.clickIfPresent(Selectors.settingsSetup.pluginStatusCheck.clickEDDnoticeCross);
 
-        await this.dismissIfPresent(Selectors.settingsSetup.pluginStatusCheck.clickPayPalCross);
+        await this.clickIfPresent(Selectors.settingsSetup.pluginStatusCheck.clickPayPalCross);
 
         if (ifWPUFLite == true) {
             //Activate Plugin
