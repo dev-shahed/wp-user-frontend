@@ -8,11 +8,11 @@
     "../../",
     "../../plugins/wpuf-pro",
     "../../plugins/wp-mail-log",
-    "../../plugins/dokan-lite",
     "../../plugins/woocommerce",
     "../../plugins/easy-digital-downloads",
+    "../../plugins/mailpoet",
+    "../../plugins/dokan-lite",
     "../../plugins/wc-vendors",
-    "../../plugins/wc-multivendor-membership",
-    "../../plugins/mailpoet"
+    "../../plugins/wc-multivendor-membership"
   ]
 }
