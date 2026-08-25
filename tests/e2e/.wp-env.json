@@ -11,8 +11,10 @@
     "../../plugins/woocommerce",
     "../../plugins/easy-digital-downloads",
     "../../plugins/mailpoet",
-    "../../plugins/dokan-lite",
     "../../plugins/wc-vendors",
     "../../plugins/wc-multivendor-membership"
-  ]
+  ],
+  "mappings": {
+    "wp-content/plugins/dokan-lite": "../../plugins/dokan-lite"
+  }
 }
