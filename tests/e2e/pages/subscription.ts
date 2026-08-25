@@ -634,7 +634,20 @@ export class SubscriptionPage extends Base {
         await this.waitForLoading();
         await this.validateAndFillStrings(Selectors.subscription.newPackPage.inputColor, buttonColor);
         await this.waitForLoading();
+        // Saving posts to wpuf/v1/subscription-settings. `waitForLoading()` only
+        // waits for domcontentloaded, which returns immediately on this Vue page,
+        // so without waiting for the response the very next test navigates away
+        // and can abort the in-flight save — the colour then never persists and
+        // the frontend renders the default button (SB0015).
+        const saved = this.page.waitForResponse(
+            response => response.url().includes('/wpuf/v1/subscription-settings')
+                && response.request().method() === 'POST'
+        );
         await this.validateAndClick(Selectors.subscription.newPackPage.savePreferencesButton);
+        const response = await saved;
+        if ( ! response.ok() ) {
+            throw new Error(`Saving button colour failed: ${response.status()} ${await response.text()}`);
+        }
         await this.waitForLoading();
         console.log('\x1b[32m%s\x1b[0m', `✅ Button color set to ${buttonColor}`);
     }

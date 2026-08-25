@@ -802,7 +802,7 @@ export class PostFormSettingsPage extends Base {
         if (flag == false) {
             await this.navigateToURL(this.wpufPostSubmitPage);
 
-            await expect(this.page.locator(Selectors.postFormSettings.multiStepByStep)).toBeVisible();
+            await expect(this.page.locator(Selectors.postFormSettings.multiStepByStep).first()).toBeVisible();
         }
     }
 

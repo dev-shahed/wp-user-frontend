@@ -1369,7 +1369,7 @@ export class RegFormSettingsPage extends Base {
     async validateMultiStepByStep() {
         await this.navigateToURL(this.newRegFormPage);
 
-        await expect(this.page.locator(Selectors.regFormSettings.advancedSettingsSection.multiStepByStep)).toBeVisible();
+        await expect(this.page.locator(Selectors.regFormSettings.advancedSettingsSection.multiStepByStep).first()).toBeVisible();
     }
 
     async disableMultiStep(formName: string) {

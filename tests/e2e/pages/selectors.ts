@@ -1125,7 +1125,7 @@ export const Selectors = {
         saveDraftButton: '//a[normalize-space(text())="Save Draft"]',
         draftSavedAlert: '//span[@class="wpuf-draft-saved"]',
         multiStepProgressbar: '//*[starts-with(normalize-space(text()),"Step ") and contains(normalize-space(text())," of ")]',  // built client-side; the revamp split one `Step Start (100%)` div into `Step 1 of 1` + `100%`, so match the step counter by its own text node (not descendants, which would match ancestors too)
-        multiStepByStep: '//li[normalize-space(text())="Step Start"]',
+        multiStepByStep: '//*[normalize-space(text())="Step Start"]',  // by-step indicator is now a step number + label pair, not an <li> whose own text is the step name; the step's fieldset legend carries the same text, so call sites take .first()
         removeStepStart: '//div[@class="step-start-indicator"]/../../../..//span[4]',
         confirmDelete: '//button[normalize-space()="Yes, delete it"]',
         threeDotButton: '(//div[contains(@class,"wpuf-relative wpuf-inline-block")]//button)[1]',
@@ -1490,7 +1490,7 @@ export const Selectors = {
             multiStepTypeDropdown: '//label[@for="multistep_progressbar_type-selectized"]//..//..//div[contains(@class,"selectize-dropdown-content")]',
             multiStepTypeOption: (value: string) => `//label[@for="multistep_progressbar_type-selectized"]//..//..//div[contains(@class,"selectize-dropdown-content")]//div[@data-value="${value}"]`,
             multiStepProgressbar: '//*[starts-with(normalize-space(text()),"Step ") and contains(normalize-space(text())," of ")]',  // built client-side; the revamp split one `Step Start (100%)` div into `Step 1 of 1` + `100%`, so match the step counter by its own text node (not descendants, which would match ancestors too)
-            multiStepByStep: '//li[normalize-space(text())="Step Start"]',
+            multiStepByStep: '//*[normalize-space(text())="Step Start"]',  // by-step indicator is now a step number + label pair, not an <li> whose own text is the step name; the step's fieldset legend carries the same text, so call sites take .first()
         },
 
         // Custom Fields Section
