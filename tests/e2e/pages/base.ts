@@ -302,9 +302,17 @@ export class Base {
         try {
             await this.waitForLoading();
             const element = this.page.locator(locator);
-            await element.waitFor();
-            expect(element.isVisible).toBeTruthy();
-            await this.page.selectOption(locator, { label: label });
+            // Wait for presence, not visibility. WPUF's multiselect field is
+            // enhanced by a widget that hides the native <select> and renders its
+            // own combobox, so a visibility wait can never be satisfied — PF0003
+            // sat on `//select[@name="multi_select[]"]` for the full timeout while
+            // the element was there the whole time, just hidden. `selectOption`
+            // still sets the value and fires input/change on the real control,
+            // which is what the form submits, so force past the actionability
+            // check only when the control is deliberately hidden.
+            await element.waitFor({ state: 'attached' });
+            const isHidden = !( await element.isVisible() );
+            await this.page.selectOption(locator, { label: label }, { force: isHidden });
             await this.waitForLoading();
             console.log('\x1b[33m%s\x1b[0m', `✅ Selected ${locator} with ${label}`);
         } catch (error) {
@@ -318,9 +326,17 @@ export class Base {
         try {
             await this.waitForLoading();
             const element = this.page.locator(locator);
-            await element.waitFor();
-            expect(element.isVisible).toBeTruthy();
-            await this.page.selectOption(locator, { value: value });
+            // Wait for presence, not visibility. WPUF's multiselect field is
+            // enhanced by a widget that hides the native <select> and renders its
+            // own combobox, so a visibility wait can never be satisfied — PF0003
+            // sat on `//select[@name="multi_select[]"]` for the full timeout while
+            // the element was there the whole time, just hidden. `selectOption`
+            // still sets the value and fires input/change on the real control,
+            // which is what the form submits, so force past the actionability
+            // check only when the control is deliberately hidden.
+            await element.waitFor({ state: 'attached' });
+            const isHidden = !( await element.isVisible() );
+            await this.page.selectOption(locator, { value: value }, { force: isHidden });
             await this.waitForLoading();
             console.log('\x1b[33m%s\x1b[0m', `✅ Selected ${locator} with ${value}`);
         } catch (error) {

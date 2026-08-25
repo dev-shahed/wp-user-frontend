@@ -1124,7 +1124,7 @@ export const Selectors = {
         postStatusColumn: (title: string, status: string, a: string, b: string) => `//td${a}[normalize-space(text())="${title}"]//..${b}//span[normalize-space(text())="${status}"]`,
         saveDraftButton: '//a[normalize-space(text())="Save Draft"]',
         draftSavedAlert: '//span[@class="wpuf-draft-saved"]',
-        multiStepProgressbar: '//div[normalize-space(text())="Step Start (100%)"]',
+        multiStepProgressbar: '//*[starts-with(normalize-space(text()),"Step ") and contains(normalize-space(text())," of ")]',  // built client-side; the revamp split one `Step Start (100%)` div into `Step 1 of 1` + `100%`, so match the step counter by its own text node (not descendants, which would match ancestors too)
         multiStepByStep: '//li[normalize-space(text())="Step Start"]',
         removeStepStart: '//div[@class="step-start-indicator"]/../../../..//span[4]',
         confirmDelete: '//button[normalize-space()="Yes, delete it"]',
@@ -1489,7 +1489,7 @@ export const Selectors = {
             multiStepTypeContainer: '//label[@for="multistep_progressbar_type-selectized"]//..//..//div[contains(@class,"selectize-control")]//div[contains(@class,"selectize-input")]',
             multiStepTypeDropdown: '//label[@for="multistep_progressbar_type-selectized"]//..//..//div[contains(@class,"selectize-dropdown-content")]',
             multiStepTypeOption: (value: string) => `//label[@for="multistep_progressbar_type-selectized"]//..//..//div[contains(@class,"selectize-dropdown-content")]//div[@data-value="${value}"]`,
-            multiStepProgressbar: '//div[normalize-space(text())="Step Start (100%)"]',
+            multiStepProgressbar: '//*[starts-with(normalize-space(text()),"Step ") and contains(normalize-space(text())," of ")]',  // built client-side; the revamp split one `Step Start (100%)` div into `Step 1 of 1` + `100%`, so match the step counter by its own text node (not descendants, which would match ancestors too)
             multiStepByStep: '//li[normalize-space(text())="Step Start"]',
         },
 
